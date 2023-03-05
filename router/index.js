@@ -1,5 +1,8 @@
 const fs = require('fs');
+const spotify = require('../dataSource/spotify');
 const path = require('path');
+const fetch = require('cross-fetch');
+const querystring = require('node:querystring');
 const router = require('find-my-way')({
     defaultRoute: (req, res) => {
         res.statusCode = 404
@@ -11,24 +14,61 @@ const router = require('find-my-way')({
     }
   })
 
-router.on('GET', '/users', (req, res, params) => {
-  res.end('{"message":"hello world"}')
+// login route
+router.on('GET', '/login', (req, res, params) => {
+    const scopes = 'user-read-recently-played user-read-private playlist-read-private';
+
+    const query = querystring.stringify({
+      response_type: 'code',
+      client_id: process.env.CLIENT_ID,
+      scope: scopes,
+      redirect_uri: 'http://localhost:8080/callback',
+    });
+
+    res.writeHead(301, {
+        Location: 'https://accounts.spotify.com/authorize?' + query
+    }).end();
 })
 
-router.on('GET', '/users/:userID/:contactID', (req, res, params) => {
-    console.log(params)
-    res.end('{"message":"hello world"}')
+//callback route
+router.on('GET', '/callback', async (req, res, params) => {
+    const rawQueryString = req.url.split('?')[1];
+    const query = querystring.parse(rawQueryString);
+    const code = query.code;
+    const authorization = process.env.CLIENT_ID + ':' + process.env.CLIENT_SECRET
+
+    let spotifyResponse = await fetch('https://accounts.spotify.com/api/token', {
+        method: 'POST',
+        headers: {
+            Authorization: 'Basic ' + Buffer.from(authorization).toString('base64'),
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+            grant_type: 'authorization_code',
+            code,
+            redirect_uri: 'http://localhost:8080/callback'
+        })
+    });
+
+    let responseData = await spotifyResponse.json()
+
+    spotify.setAccessToken(responseData.access_token);
+
+    const user = await spotify.getUser();
+
+    const playlist = await spotify.getPlaylist(user.id);
+    console.log(playlist);
+
+    res.end();
 })
 
 // serving files
 router.on('GET', '/*', (req, res, params) => {
     const url = req.url.substring(1);
-    console.log(url);
     let file;
     try {
         file = fs.readFileSync(path.resolve(__dirname, `../client/${url}`), 'utf8');
     } catch (err) {
-        console.log(err);
         res.statusCode = 404;
         res.write('file not found');
         res.end();
