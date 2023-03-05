@@ -1,0 +1,22 @@
+{
+  "name": "spotify-project",
+  "version": "1.0.0",
+  "description": "Spotify Project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MattVaughan-Jones/spotify-project.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MattVaughan-Jones/spotify-project/issues"
+  },
+  "homepage": "https://github.com/MattVaughan-Jones/spotify-project#readme",
+  "dependencies": {
+    "find-my-way": "^7.5.0"
+  }
+}
