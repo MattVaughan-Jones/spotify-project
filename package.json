@@ -4,7 +4,9 @@
   "description": "Spotify Project",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "./node_modules/.bin/esbuild ./client/app.jsx --bundle --outfile=./client/index.js",
+    "watch": "./node_modules/.bin/esbuild ./client/app.jsx --bundle --watch --outfile=./client/index.js"
   },
   "repository": {
     "type": "git",
@@ -19,6 +21,9 @@
   "dependencies": {
     "cross-fetch": "^3.1.5",
     "dotenv": "^16.0.3",
-    "find-my-way": "^7.5.0"
+    "esbuild": "0.17.11",
+    "find-my-way": "^7.5.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   }
 }

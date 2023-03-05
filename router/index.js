@@ -51,16 +51,14 @@ router.on('GET', '/callback', async (req, res, params) => {
     });
 
     let responseData = await spotifyResponse.json()
-
     spotify.setAccessToken(responseData.access_token);
 
-    const user = await spotify.getUser();
-
-    const playlist = await spotify.getPlaylist(user.id);
-    console.log(playlist);
-
-    res.end();
+    res.writeHead(301, {
+        Location: 'http://localhost:8080/index.html'
+    }).end();
 })
+
+spotify.accessToken
 
 // serving files
 router.on('GET', '/*', (req, res, params) => {
