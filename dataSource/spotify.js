@@ -1,9 +1,19 @@
 const fetch = require('cross-fetch');
 
-let accessToken = '';
+let accessToken;
+let refreshToken;
 
 function setAccessToken(token) {
     accessToken = token;
+    console.log('setting access token to: ', token);
+}
+
+function setRefreshToken(token) {
+    refreshToken = token;
+}
+
+function getAccessToken() {
+    return accessToken;
 }
 
 // get user information like ID
@@ -40,11 +50,33 @@ async function getPlaylist(userID) {
     });
 
     return await spotifyResponse.json();
-    
 }
+
+setInterval(async () => {
+    if (refreshToken) {
+        const authorization = process.env.CLIENT_ID + ':' + process.env.CLIENT_SECRET
+        let spotifyResponse = await fetch('https://accounts.spotify.com/api/token', {
+            method: 'POST',
+            headers: {
+                Authorization: 'Basic ' + Buffer.from(authorization).toString('base64'),
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams({
+                grant_type: 'refresh_token',
+                refresh_token: refreshToken
+            })
+        });
+        let accessToken = await spotifyResponse.json()
+
+        setAccessToken(accessToken.access_token);
+
+    }
+}, 30000)
 
 module.exports = {
     setAccessToken,
+    getAccessToken,
+    setRefreshToken,
     getPlaylist,
     getUser
 };
