@@ -97,31 +97,28 @@ router.on('GET', '/playlists', async (req, res, params) => {
 })
 
 // playlistTracks route
-router.on('POST', '/playlistTracks', async (req, res, params) => {
+router.on('GET', '/playlistData/:id', async (req, res, params) => {
 
     let token = spotify.getAccessToken();
-    let tracksListResponse;
 
-    let data = '';
-    let playlistId = 1;
-    req.on('data', chunk => {
-        data += chunk;
-    })
+    const playlistId = params.id;
+    console.log('playlistId: ' + playlistId);
+
+    // fetch list of playlists
+    let spotifyResponse = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks?limit=50`, {
+        method: 'GET',
+        headers: {
+            Authorization: 'Bearer ' + token,
+        }
+    });
     
-    req.on('end', async () =>{
-        playlistId = JSON.parse(data).id;
+    let responseData = await spotifyResponse.json()
 
-        // fetch track info
-        tracksListResponse = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {
-            method: 'GET',
-            headers: {
-                Authorization: 'Bearer ' + token,
-            }
-        });
-
-        res.end();
-
+    let trackIds = responseData.items.map((item) => {
+        return item.track.id;
     })
+
+    console.log(trackIds);
 
     res.statuscode = 200;
     res.write(JSON.stringify({response: 'response'}));

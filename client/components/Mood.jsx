@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Chart from "chart.js/auto";
 import { Bubble } from "react-chartjs-2";
 
@@ -11,18 +11,18 @@ const Mood = ({ playlistId }) => {
 
     useEffect(() => {
         async function getPlaylists() {
-            let playlistsResponse = await fetch(`http://localhost:8080/playlistData?playlistID=${playlistId}`, {
+            let playlistsResponse = await fetch(`http://localhost:8080/playlistData/${playlistId}`, {
                 method: 'GET',
             });
             let json = await playlistsResponse.json();
 
-            setPlaylists(json.playlists.items);
+            setPlaylistData(json);
         }
 
         getPlaylists();
     }, [])
 
-
+    console.log(playlistData);
 
     const data = {
         datasets: [{

@@ -71,7 +71,7 @@ setInterval(async () => {
         setAccessToken(accessToken.access_token);
 
     }
-}, 30000)
+}, 2400000)
 
 module.exports = {
     setAccessToken,

@@ -57091,14 +57091,14 @@ Please use another name.` : (0, import_utils.formatMuiErrorMessage)(18));
 
   // client/components/Playslists.jsx
   var Playlists = ({ callback: callback2 }) => {
-    const [playlists, setPlaylists2] = (0, import_react9.useState)([]);
+    const [playlists, setPlaylists] = (0, import_react9.useState)([]);
     (0, import_react9.useEffect)(() => {
       async function getPlaylists() {
         let playlistsResponse = await fetch("http://localhost:8080/playlists", {
           method: "GET"
         });
         let json = await playlistsResponse.json();
-        setPlaylists2(json.playlists.items);
+        setPlaylists(json.playlists.items);
       }
       getPlaylists();
     }, []);
@@ -57106,7 +57106,7 @@ Please use another name.` : (0, import_utils.formatMuiErrorMessage)(18));
       callback2(playlistId);
     }
     return /* @__PURE__ */ import_react9.default.createElement(import_react9.default.Fragment, null, /* @__PURE__ */ import_react9.default.createElement(Grid2_default, { container: true, spacing: 2 }, playlists.map((playlist) => {
-      return /* @__PURE__ */ import_react9.default.createElement(Grid2_default, { xs: 3, display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }, /* @__PURE__ */ import_react9.default.createElement(Playlist_default, { playlist, callback: selectPlaylist }));
+      return /* @__PURE__ */ import_react9.default.createElement(Grid2_default, { key: playlist.id, xs: 3, display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }, /* @__PURE__ */ import_react9.default.createElement(Playlist_default, { playlist, callback: selectPlaylist }));
     })));
   };
   var Playslists_default = Playlists;
@@ -71352,16 +71352,17 @@ Please use another name.` : (0, import_utils.formatMuiErrorMessage)(18));
   var Mood = ({ playlistId }) => {
     console.log(playlistId);
     const [playlistData, setPlaylistData] = (0, import_react11.useState)([]);
-    useEffect(() => {
+    (0, import_react11.useEffect)(() => {
       async function getPlaylists() {
-        let playlistsResponse = await fetch(`http://localhost:8080/playlistData?playlistID=${playlistId}`, {
+        let playlistsResponse = await fetch(`http://localhost:8080/playlistData/${playlistId}`, {
           method: "GET"
         });
         let json = await playlistsResponse.json();
-        setPlaylists(json.playlists.items);
+        setPlaylistData(json);
       }
       getPlaylists();
     }, []);
+    console.log(playlistData);
     const data = {
       datasets: [{
         label: "First Dataset",

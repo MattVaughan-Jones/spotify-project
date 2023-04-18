@@ -30,7 +30,7 @@ const Playlists = ({callback}) => {
             <Grid container spacing={2}>
                 {playlists.map((playlist) => {
                     return (
-                        <Grid xs={3} display="flex" justifyContent="center" alignItems="center" flexDirection="column" >
+                        <Grid key={playlist.id} xs={3} display="flex" justifyContent="center" alignItems="center" flexDirection="column" >
                             <Playlist playlist={playlist} callback={selectPlaylist}></Playlist>
                         </Grid>
                     )
