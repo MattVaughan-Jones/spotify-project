@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import CheckingLogin from './CheckingLogin';
 import Playlists from './Playslists';
 import Mood from './Mood';
 
@@ -18,7 +17,6 @@ const App = () => {
 
     const [loggedIn, setLoggedIn] = useState(false);
     const [selectedPlaylist, setSelectedPlaylist] = useState('');
-
 
     const theme = createTheme({
         palette: {
@@ -51,17 +49,15 @@ const App = () => {
             if (spotifyResponse.status === 200) {
                 setLoggedIn(true);
             } else {
-            // redirect to /login page
-            window.location.replace("http://localhost:8080/login");
-            setLoggedIn(false);
+                // redirect to /login page
+                window.location.replace("http://localhost:8080/login");
+                setLoggedIn(false);
             }
             
         }
 
         isLoggedIn();
     }, [])
-
-    //{loggedIn ? <h1>Actual App Component</h1> : <CheckingLogin></CheckingLogin> }
 
     return (
         <>

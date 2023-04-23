@@ -6,12 +6,12 @@ import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
 
 const Playlist = ({ playlist, callback}) => {
-    let coverArt = '';
+    let coverArt;
 
     try {
         coverArt = playlist.images[0].url;
     } catch (error) {
-        // 
+        //
     }
 
     function selectPlaylist() {

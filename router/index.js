@@ -1,5 +1,6 @@
 const fs = require('fs');
 const spotify = require('../dataSource/spotify');
+const moodAnalyser = require('../controllers/moodAnalyserController');
 const path = require('path');
 const fetch = require('cross-fetch');
 const querystring = require('node:querystring');
@@ -56,7 +57,6 @@ router.on('GET', '/callback', async (req, res, params) => {
 
         let responseData = await spotifyResponse.json()
         spotify.setAccessToken(responseData.access_token);
-        console.log(responseData.refresh_token);
         spotify.setRefreshToken(responseData.refresh_token);
 
         res.writeHead(301, {
@@ -100,28 +100,36 @@ router.on('GET', '/playlists', async (req, res, params) => {
 router.on('GET', '/playlistData/:id', async (req, res, params) => {
 
     let token = spotify.getAccessToken();
-
     const playlistId = params.id;
-    console.log('playlistId: ' + playlistId);
 
-    // fetch list of playlists
-    let spotifyResponse = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks?limit=50`, {
+    // fetch list of tracks in playlist
+    let spotifyTracksResponse = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks?limit=50`, {
         method: 'GET',
         headers: {
             Authorization: 'Bearer ' + token,
         }
     });
     
-    let responseData = await spotifyResponse.json()
+    let responseData = await spotifyTracksResponse.json()
 
-    let trackIds = responseData.items.map((item) => {
+    let trackIdsString = responseData.items.map((item) => {
         return item.track.id;
-    })
+    }).toString()
 
-    console.log(trackIds);
+    // fetch list tracks' audio features
+    let spotifyAudioFeaturesResponse = await fetch(`https://api.spotify.com/v1/audio-features?ids=${trackIdsString}`, {
+        method: 'GET',
+        headers: {
+            Authorization: 'Bearer ' + token,
+        }
+    });
+
+    let audioFeaturesResponseData = await spotifyAudioFeaturesResponse.json()
+
+    let playlistAudioFeatures = moodAnalyser.analyse(audioFeaturesResponseData.audio_features);
 
     res.statuscode = 200;
-    res.write(JSON.stringify({response: 'response'}));
+    res.write(JSON.stringify({response: playlistAudioFeatures}));
     res.end()
     return;
 })

@@ -5,7 +5,6 @@ let refreshToken;
 
 function setAccessToken(token) {
     accessToken = token;
-    console.log('setting access token to: ', token);
 }
 
 function setRefreshToken(token) {

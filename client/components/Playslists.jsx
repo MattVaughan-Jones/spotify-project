@@ -23,8 +23,6 @@ const Playlists = ({callback}) => {
         callback(playlistId)
     }
     
-    //{loggedIn ? <h1>Actual App Component</h1> : <CheckingLogin></CheckingLogin> }
-
     return (
         <>
             <Grid container spacing={2}>
