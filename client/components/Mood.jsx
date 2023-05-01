@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import Chart from "chart.js/auto";
 import { Radar, Bar } from "react-chartjs-2";
 import Grid from '@mui/material/Unstable_Grid2';
+import { Paper, Box, Card, CardContent, Typography } from '@mui/material';
 
 const Mood = ({ playlistId }) => {
 
@@ -52,12 +53,12 @@ const Mood = ({ playlistId }) => {
         label: 'Big Five Personality Traits',
         data: Object.values(psychoanalysis.bigFive),
         fill: true,
-        backgroundColor: 'rgb(75, 192, 192, 0.2)',
-        borderColor: 'rgb(75, 192, 192)',
-        pointBackgroundColor: 'rgb(75, 192, 192)',
+        backgroundColor: 'rgb(82, 176, 41, 0.2)',
+        borderColor: 'rgb(82, 176, 41)',
+        pointBackgroundColor: 'rgb(82, 176, 41)',
         pointBorderColor: '#fff',
         pointHoverBackgroundColor: '#fff',
-        pointHoverBorderColor: 'rgb(75, 192, 192)'
+        pointHoverBorderColor: 'rgb(82, 176, 41)'
       }]
     });
 
@@ -67,9 +68,9 @@ const Mood = ({ playlistId }) => {
         label: 'Dark Triad',
         data: Object.values(psychoanalysis.darkTriad),
         fill: true,
-        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-        borderColor: 'rgb(255, 99, 132)',
-        pointBackgroundColor: 'rgb(255, 99, 132)',
+        backgroundColor: 'rgb(54, 162, 235, 0.2)',
+        borderColor: 'rgb(54, 162, 235)',
+        pointBackgroundColor: 'rgb(54, 162, 235)',
         pointBorderColor: '#fff',
         pointHoverBackgroundColor: '#fff',
         pointHoverBorderColor: 'rgb(255, 99, 132)'
@@ -89,7 +90,7 @@ const Mood = ({ playlistId }) => {
           'rgb(255, 99, 132)',
           'rgb(255, 159, 64)',
         ],
-        borderWidth: 1
+        borderWidth: 2
       }]
     });
 
@@ -97,26 +98,142 @@ const Mood = ({ playlistId }) => {
   }
 
   getPsycholanalysis();
+
+  const bigFiveOptions = {
+    elements: {
+      line: {
+        borderWidth: 2
+      }
+    },
+    scales: {
+      r: {
+        min: 0,
+        max: 1,
+        ticks: {
+          font: {
+            size: 14
+          },
+          maxTicksLimit: 6
+        },
+        pointLabels: {
+          font: {
+            size: 12
+          }
+        }
+      },
+    },
+    plugins: {
+      legend: {
+        labels: {
+          font: {
+            size: 20,
+            weight: 'bold'
+          }
+        }
+      }
+    }
+  };
+
+  const darkTriadOptions = {
+    elements: {
+      line: {
+        borderWidth: 2
+      },
+    },
+    scales: {
+      r: {
+        min: 0,
+        max: 1,
+        ticks: {
+          font: {
+            size: 14
+          },
+          maxTicksLimit: 6
+        },
+        pointLabels: {
+          font: {
+            size: 12
+          }
+        }
+      },
+    },
+    plugins: {
+      legend: {
+        labels: {
+          font: {
+            size: 20,
+            weight: 'bold'
+          }
+        }
+      }
+    }
+  };
+
+  const likeabilityOptions = {
+    aspectRatio: 1,
+    elements: {
+      bar: {
+        backgroundColor: '#282C34'
+      }
+    },
+    scales: {
+      y: {
+        min: 0,
+        max: 1,
+        ticks: {
+          font: {
+            size: 14
+          }
+        }
+      },
+      x: {
+        ticks: {
+          font: {
+            size: 14
+          }
+        }
+      }
+    },
+    plugins: {
+      legend: {
+        labels: {
+          font: {
+            size: 20,
+            weight: 'bold'
+          },
+          display: false
+        }
+      }
+    }
+  };
   
   return (
     <>
-      <Grid container spacing={15} p={10}>
+      <Grid container spacing={5} py={5} px={2}>
 
-        <Grid key='bigFive' xs={6} display="flex" justifyContent="center" alignItems="center" flexDirection="column" >
-          <Radar data={bigFiveData} />
+        <Grid key='bigFive' xs={4} display="flex" justifyContent="center" alignItems="center" flexDirection="column" >
+          <Radar data={bigFiveData} options={bigFiveOptions} />
         </Grid>
 
-        <Grid key='darkTriad' xs={6} display="flex" justifyContent="center" alignItems="center" flexDirection="column" >
-          <Radar data={darkTriadData} />
+        <Grid key='darkTriad' xs={4} display="flex" justifyContent="center" alignItems="center" flexDirection="column" >
+          <Radar data={darkTriadData} options={darkTriadOptions} />
         </Grid>
 
-        <Grid key='likeability' xs={6} display="flex" justifyContent="center" alignItems="center" flexDirection="column" >
-          <Bar data={likeabilityData} />
+        <Grid key='likeability' xs={4} display="flex" justifyContent="center" alignItems="center" flexDirection="column" >
+          <Bar data={likeabilityData} options={likeabilityOptions} />
         </Grid>
 
-        <Grid key='advice' xs={6} display="flex" justifyContent="center" alignItems="center" flexDirection="column" >
-          <div>Some handy live advice...</div>
-          <div>{advice}</div>
+        <Grid key='advice' xs={12} display="flex" justifyContent="center" alignItems="center" flexDirection="column" >
+          <Card sx={{ minWidth: "100%" }} style={{backgroundColor: "rgb(56, 142, 60)"}}>
+            <CardContent>
+              <Typography sx={{ fontSize: 18 }} color="text.secondary" display="flex" alignItems="center" flexDirection="column" gutterBottom>
+                Some handy life advice...
+              </Typography>
+              <Typography variant="h4" color="white" display="flex" alignItems="center" flexDirection="column">
+                {advice}
+              </Typography>
+            </CardContent>
+          </Card>
         </Grid>
 
       </Grid>
