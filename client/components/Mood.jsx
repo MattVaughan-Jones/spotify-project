@@ -226,9 +226,6 @@ const Mood = ({ playlistId }) => {
         <Grid key='advice' xs={12} display="flex" justifyContent="center" alignItems="center" flexDirection="column" >
           <Card sx={{ minWidth: "100%" }} style={{backgroundColor: "rgb(56, 142, 60)"}}>
             <CardContent>
-              <Typography sx={{ fontSize: 18 }} color="text.secondary" display="flex" alignItems="center" flexDirection="column" gutterBottom>
-                Some handy life advice...
-              </Typography>
               <Typography variant="h4" color="white" display="flex" alignItems="center" flexDirection="column">
                 {advice}
               </Typography>

@@ -26,6 +26,8 @@ router.on('GET', '/login', (req, res, params) => {
         redirect_uri: 'http://localhost:8080/callback',
     });
 
+    console.log('hits /login');
+
     res.writeHead(301, {
         Location: 'https://accounts.spotify.com/authorize?' + query
     }).end();

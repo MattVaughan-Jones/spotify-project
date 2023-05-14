@@ -40,6 +40,10 @@ const App = () => {
         setSelectedPlaylist('');
     }
 
+    function logout() {
+        setLoggedIn(false);
+    }
+
     useEffect(() => {
         async function isLoggedIn() {
             let spotifyResponse = await fetch('http://localhost:8080/check_login', {
@@ -61,7 +65,7 @@ const App = () => {
 
     return (
         <>
-            <Box sx={{ flexGrow: 1 }}>
+            <Box sx={{ flexGrow: 1, px: 2 }}>
                 <AppBar theme={theme} position="static" color="primary">
                     <Toolbar>
                     <IconButton
@@ -77,7 +81,7 @@ const App = () => {
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                         Moodalizer
                     </Typography>
-                    <Button color="inherit">Logout</Button>
+                    <Button color="inherit" onClick={logout}>Logout</Button>
                     </Toolbar>
                 </AppBar>
             </Box>
