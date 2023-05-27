@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Chart from "chart.js/auto";
 import { Radar, Bar } from "react-chartjs-2";
 import Grid from '@mui/material/Unstable_Grid2';
@@ -38,66 +38,67 @@ const Mood = ({ playlistId }) => {
 
   let psychoanalysis;
 
-  async function getPsycholanalysis() {
-    let playlistsResponse = await fetch(`http://localhost:8080/playlistData/${playlistId}`, {
-        method: 'GET',
-    });
-    console.log('for some reason it refreshes the Mood component');
-    json = await playlistsResponse.json();
-    
-    psychoanalysis = json.response;
+  useEffect(() => {
+    async function getPsycholanalysis() {
+      let playlistsResponse = await fetch(`http://localhost:8080/playlistData/${playlistId}`, {
+          method: 'GET',
+      });
+      json = await playlistsResponse.json();
+      
+      psychoanalysis = json.response;
 
-    setBigFiveData({
-      labels: Object.keys(psychoanalysis.bigFive),
-      datasets: [{
-        label: 'Big Five Personality Traits',
-        data: Object.values(psychoanalysis.bigFive),
-        fill: true,
-        backgroundColor: 'rgb(82, 176, 41, 0.2)',
-        borderColor: 'rgb(82, 176, 41)',
-        pointBackgroundColor: 'rgb(82, 176, 41)',
-        pointBorderColor: '#fff',
-        pointHoverBackgroundColor: '#fff',
-        pointHoverBorderColor: 'rgb(82, 176, 41)'
-      }]
-    });
+      setBigFiveData({
+        labels: Object.keys(psychoanalysis.bigFive),
+        datasets: [{
+          label: 'Big Five Personality Traits',
+          data: Object.values(psychoanalysis.bigFive),
+          fill: true,
+          backgroundColor: 'rgb(82, 176, 41, 0.2)',
+          borderColor: 'rgb(82, 176, 41)',
+          pointBackgroundColor: 'rgb(82, 176, 41)',
+          pointBorderColor: '#fff',
+          pointHoverBackgroundColor: '#fff',
+          pointHoverBorderColor: 'rgb(82, 176, 41)'
+        }]
+      });
 
-    setdarkTriadData({
-      labels: Object.keys(psychoanalysis.darkTriad),
-      datasets: [{
-        label: 'Dark Triad',
-        data: Object.values(psychoanalysis.darkTriad),
-        fill: true,
-        backgroundColor: 'rgb(54, 162, 235, 0.2)',
-        borderColor: 'rgb(54, 162, 235)',
-        pointBackgroundColor: 'rgb(54, 162, 235)',
-        pointBorderColor: '#fff',
-        pointHoverBackgroundColor: '#fff',
-        pointHoverBorderColor: 'rgb(255, 99, 132)'
-      }]
-    });
+      setdarkTriadData({
+        labels: Object.keys(psychoanalysis.darkTriad),
+        datasets: [{
+          label: 'Dark Triad',
+          data: Object.values(psychoanalysis.darkTriad),
+          fill: true,
+          backgroundColor: 'rgb(54, 162, 235, 0.2)',
+          borderColor: 'rgb(54, 162, 235)',
+          pointBackgroundColor: 'rgb(54, 162, 235)',
+          pointBorderColor: '#fff',
+          pointHoverBackgroundColor: '#fff',
+          pointHoverBorderColor: 'rgb(255, 99, 132)'
+        }]
+      });
 
-    setLikeabilityData({
-      labels: ['average', 'You'],
-      datasets: [{
-        label: 'Likeability',
-        data: Object.values(psychoanalysis.likeability),
-        backgroundColor: [
-          'rgba(255, 99, 132, 0.2)',
-          'rgba(255, 159, 64, 0.2)',
-        ],
-        borderColor: [
-          'rgb(255, 99, 132)',
-          'rgb(255, 159, 64)',
-        ],
-        borderWidth: 2
-      }]
-    });
+      setLikeabilityData({
+        labels: ['average', 'You'],
+        datasets: [{
+          label: 'Likeability',
+          data: Object.values(psychoanalysis.likeability),
+          backgroundColor: [
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(255, 159, 64, 0.2)',
+          ],
+          borderColor: [
+            'rgb(255, 99, 132)',
+            'rgb(255, 159, 64)',
+          ],
+          borderWidth: 2
+        }]
+      });
 
-    setAdvice(psychoanalysis.advice);
-  }
+      setAdvice(psychoanalysis.advice);
+    }
 
-  getPsycholanalysis();
+    getPsycholanalysis();
+  }, [])
 
   const bigFiveOptions = {
     elements: {
