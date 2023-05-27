@@ -9,12 +9,17 @@ const Playlist = ({ playlist, callback}) => {
     let coverArt;
 
     try {
-        coverArt = playlist.images[0].url;
+        if (playlist.images[0]){
+            coverArt = playlist.images[0].url;
+        } else {
+            coverArt = "https://i.pinimg.com/originals/59/cd/19/59cd19a18d121fbb96a016a0044e9b48.jpg"
+        }
     } catch (error) {
         //
     }
 
     function selectPlaylist() {
+        //TODO - if playlist has content {callback(playlist.id)} else {display message "empty playlist"}
         callback(playlist.id);
     }
     

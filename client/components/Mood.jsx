@@ -36,13 +36,13 @@ const Mood = ({ playlistId }) => {
     }]
   });
 
-
   let psychoanalysis;
 
   async function getPsycholanalysis() {
     let playlistsResponse = await fetch(`http://localhost:8080/playlistData/${playlistId}`, {
         method: 'GET',
     });
+    console.log('for some reason it refreshes the Mood component');
     json = await playlistsResponse.json();
     
     psychoanalysis = json.response;
@@ -232,10 +232,9 @@ const Mood = ({ playlistId }) => {
             </CardContent>
           </Card>
         </Grid>
-
       </Grid>
     </>
-  )
+  );
 }
 
 export default Mood;

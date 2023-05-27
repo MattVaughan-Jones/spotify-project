@@ -25,7 +25,7 @@ const Playlists = ({callback}) => {
     
     return (
         <>
-            <Grid container spacing={2}>
+            <Grid sx={{alignItems: "flex-start", mt: 4}} container spacing={2}>
                 {playlists.map((playlist) => {
                     return (
                         <Grid key={playlist.id} xs={3} display="flex" justifyContent="center" alignItems="center" flexDirection="column" >

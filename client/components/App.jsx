@@ -40,8 +40,18 @@ const App = () => {
         setSelectedPlaylist('');
     }
 
-    function logout() {
-        setLoggedIn(false);
+    async function logout() {
+
+        const url = 'https://accounts.spotify.com/en/logout';
+        const spotifyLogoutWindow = window.open(url, 'Spotify Logout', 'width=700,height=500,top=40,left=40');
+        setTimeout(() => {
+            spotifyLogoutWindow.close();
+            window.location.href = 'http://localhost:8080/login'
+        }, 1500)
+
+        fetch('http://localhost:8080/logout', {
+            method: 'GET',
+        });
     }
 
     useEffect(() => {
