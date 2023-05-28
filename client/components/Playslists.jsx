@@ -8,7 +8,7 @@ const Playlists = ({callback}) => {
 
     useEffect(() => {
         async function getPlaylists() {
-            let playlistsResponse = await fetch('http://localhost:8080/playlists', {
+            let playlistsResponse = await fetch(`${process.env.BASE_URL}/playlists`, {
                 method: 'GET',
             });
             let json = await playlistsResponse.json();

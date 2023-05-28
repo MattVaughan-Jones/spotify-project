@@ -23,11 +23,11 @@ router.on('GET', '/login', (req, res, params) => {
         response_type: 'code',
         client_id: process.env.CLIENT_ID,
         scope: scopes,
-        redirect_uri: 'http://localhost:8080/callback',
+        redirect_uri: `${BASE_URL}/callback`,
     });
 
     res.writeHead(301, {
-        Location: 'https://accounts.spotify.com/authorize?' + query
+        Location: `${BASE_URL}/authorize?` + query
     }).end();
 })
 
@@ -59,7 +59,7 @@ router.on('GET', '/callback', async (req, res, params) => {
             body: new URLSearchParams({
                 grant_type: 'authorization_code',
                 code,
-                redirect_uri: 'http://localhost:8080/callback'
+                redirect_uri: `${BASE_URL}/callback`
             })
         });
 
@@ -68,7 +68,7 @@ router.on('GET', '/callback', async (req, res, params) => {
         spotify.setRefreshToken(responseData.refresh_token);
 
         res.writeHead(301, {
-            Location: 'http://localhost:8080/index.html'
+            Location: `${BASE_URL}/index.html`
         }).end();
     }
 })

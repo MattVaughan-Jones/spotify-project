@@ -47,17 +47,17 @@ const App = () => {
         const spotifyLogoutWindow = window.open(url, 'Spotify Logout', 'width=700,height=500,top=40,left=40');
         setTimeout(() => {
             spotifyLogoutWindow.close();
-            window.location.href = 'http://localhost:8080/login'
+            window.location.href = `${process.env.BASE_URL}/login`
         }, 1500)
 
-        fetch('http://localhost:8080/logout', {
+        fetch(`${process.env.BASE_URL}/logout`, {
             method: 'GET',
         });
     }
 
     useEffect(() => {
         async function isLoggedIn() {
-            let spotifyResponse = await fetch('http://localhost:8080/check_login', {
+            let spotifyResponse = await fetch(`${process.env.BASE_URL}/check_login`, {
                 method: 'GET',
             });
         
@@ -65,7 +65,7 @@ const App = () => {
                 setLoggedIn(true);
             } else {
                 // redirect to /login page
-                window.location.replace("http://localhost:8080/login");
+                window.location.replace(`${process.env.BASE_URL}/login`);
                 setLoggedIn(false);
             }
             
