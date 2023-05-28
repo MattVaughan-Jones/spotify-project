@@ -6,6 +6,6 @@ module.exports = function(){
         router.lookup(req, res);
     });
     
-    return server.listen(8080);
+    return server.listen(process.env.PORT);
 
 };
