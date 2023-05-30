@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import Playlists from './Playslists';
 import Mood from './Mood';
+import * as env from 'env';
 
 import { createTheme } from '@mui/material/styles';
-
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -47,17 +47,17 @@ const App = () => {
         const spotifyLogoutWindow = window.open(url, 'Spotify Logout', 'width=700,height=500,top=40,left=40');
         setTimeout(() => {
             spotifyLogoutWindow.close();
-            window.location.href = `${process.env.BASE_URL}/login`
+            window.location.href = `${env.REACT_APP_BASE_URL}/login`
         }, 1500)
 
-        fetch(`${process.env.BASE_URL}/logout`, {
+        fetch(`${env.REACT_APP_BASE_URL}/logout`, {
             method: 'GET',
         });
     }
 
     useEffect(() => {
         async function isLoggedIn() {
-            let spotifyResponse = await fetch(`${process.env.BASE_URL}/check_login`, {
+            let spotifyResponse = await fetch(`${env.REACT_APP_BASE_URL}/check_login`, {
                 method: 'GET',
             });
         
@@ -65,7 +65,7 @@ const App = () => {
                 setLoggedIn(true);
             } else {
                 // redirect to /login page
-                window.location.replace(`${process.env.BASE_URL}/login`);
+                window.location.replace(`${env.REACT_APP_BASE_URL}/login`);
                 setLoggedIn(false);
             }
             

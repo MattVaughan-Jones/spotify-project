@@ -3,7 +3,8 @@ import React, { useState, useEffect } from 'react';
 import Chart from "chart.js/auto";
 import { Radar, Bar } from "react-chartjs-2";
 import Grid from '@mui/material/Unstable_Grid2';
-import { Paper, Box, Card, CardContent, Typography } from '@mui/material';
+import { Card, CardContent, Typography } from '@mui/material';
+import * as env from 'env';
 
 const Mood = ({ playlistId }) => {
 
@@ -40,7 +41,7 @@ const Mood = ({ playlistId }) => {
 
   useEffect(() => {
     async function getPsycholanalysis() {
-      let playlistsResponse = await fetch(`${process.env.BASE_URL}/playlistData/${playlistId}`, {
+      let playlistsResponse = await fetch(`${env.REACT_APP_BASE_URL}/playlistData/${playlistId}`, {
           method: 'GET',
       });
       json = await playlistsResponse.json();

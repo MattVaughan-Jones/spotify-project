@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Playlist from './Playlist';
 import Grid from '@mui/material/Unstable_Grid2';
+import * as env from 'env';
 
 const Playlists = ({callback}) => {
 
@@ -8,7 +9,7 @@ const Playlists = ({callback}) => {
 
     useEffect(() => {
         async function getPlaylists() {
-            let playlistsResponse = await fetch(`${process.env.BASE_URL}/playlists`, {
+            let playlistsResponse = await fetch(`${env.REACT_APP_BASE_URL}/playlists`, {
                 method: 'GET',
             });
             let json = await playlistsResponse.json();
