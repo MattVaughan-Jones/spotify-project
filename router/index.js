@@ -104,10 +104,10 @@ router.on('GET', '/playlists', async (req, res, params) => {
             }
         });
 
-        let responseData = await spotifyResponse.text()
+        let responseData = await spotifyResponse.json()
 
         res.statuscode = 200;
-        res.write(responseData);
+        res.write(JSON.stringify({playlists: responseData}));
         res.end()
 
         return;
