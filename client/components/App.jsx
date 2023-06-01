@@ -74,6 +74,21 @@ const App = () => {
         isLoggedIn();
     }, [])
 
+    function Body(props) {
+        const loggedIn = props.loggedIn;
+        const selectedPlaylist = props.selectedPlaylist;
+
+        if (loggedIn) {
+            if (selectedPlaylist) {
+                return(<Mood playlistId={selectedPlaylist}></Mood>)
+            } else {
+                return(<Playlists callback={selectPlaylist}></Playlists>)
+            }
+        } else {
+            return(<></>)
+        }
+    }
+
     return (
         <>
             <Box sx={{ flexGrow: 1, px: 2 }}>
@@ -96,7 +111,7 @@ const App = () => {
                     </Toolbar>
                 </AppBar>
             </Box>
-            {selectedPlaylist ? <Mood playlistId={selectedPlaylist}></Mood> : <Playlists callback={selectPlaylist}></Playlists>}
+            <Body loggedIn={loggedIn} selectedPlaylist={selectedPlaylist}></Body>
         </>
     )
 }

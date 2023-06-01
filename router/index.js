@@ -27,7 +27,7 @@ router.on('GET', '/login', (req, res, params) => {
     });
 
     res.writeHead(301, {
-        Location: `${process.env.BASE_URL}/authorize?` + query
+        Location: `https://accounts.spotify.com/authorize?` + query
     }).end();
 })
 

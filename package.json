@@ -6,8 +6,8 @@
   "scripts": {
     "serve": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "esbuild": "node esbuild.config.js",
-    "eswatch": "node esbuild.config.js -w",
+    "esbuild": "node build.js",
+    "eswatch": "node build.js -w",
     "build": "./node_modules/.bin/esbuild ./client/app.jsx --bundle --outfile=./client/index.js",
     "watch": "./node_modules/.bin/esbuild ./client/app.jsx --bundle --watch --outfile=./client/index.js"
   },

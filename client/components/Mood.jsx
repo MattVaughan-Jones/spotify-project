@@ -8,6 +8,8 @@ import * as env from 'env';
 
 const Mood = ({ playlistId }) => {
 
+  console.log('it does something');
+
   const radarInitialState = {
     labels: [],
     datasets: [{
@@ -40,6 +42,7 @@ const Mood = ({ playlistId }) => {
   let psychoanalysis;
 
   useEffect(() => {
+    console.log('the useeffect');
     async function getPsycholanalysis() {
       let playlistsResponse = await fetch(`${env.REACT_APP_BASE_URL}/playlistData/${playlistId}`, {
           method: 'GET',
