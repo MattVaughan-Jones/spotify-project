@@ -96,19 +96,32 @@ router.on('GET', '/playlists', async (req, res, params) => {
     let token = spotify.getAccessToken();
 
     // fetch list of playlists
-    let spotifyResponse = await fetch('https://api.spotify.com/v1/me/playlists?limit=50', {
-        method: 'GET',
-        headers: {
-            Authorization: 'Bearer ' + token,
-        }
-    });
+    try {
+        let spotifyResponse = await fetch('https://api.spotify.com/v1/me/playlists?limit=50', {
+            method: 'GET',
+            headers: {
+                Authorization: 'Bearer ' + token,
+            }
+        });
 
-    let responseData = await spotifyResponse.json()
+        let responseData = await spotifyResponse.json()
 
-    res.statuscode = 200;
-    res.write(JSON.stringify({playlists: responseData}));
-    res.end()
-    return;
+        res.statuscode = 200;
+        res.write(JSON.stringify({playlists: responseData}));
+        res.end()
+
+        return;
+
+    } catch(e) {
+
+        res.statuscode = 400;
+        res.write(e.message);
+        res.end();
+
+        return;
+
+    }
+    
 })
 
 // playlistTracks route
