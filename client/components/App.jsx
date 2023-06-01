@@ -47,10 +47,10 @@ const App = () => {
         const spotifyLogoutWindow = window.open(url, 'Spotify Logout', 'width=700,height=500,top=40,left=40');
         setTimeout(() => {
             spotifyLogoutWindow.close();
-            window.location.href = `${env.REACT_APP_BASE_URL}/login`
+            window.location.href = `/login`
         }, 1500)
 
-        fetch(`${env.REACT_APP_BASE_URL}/logout`, {
+        fetch(`/logout`, {
             method: 'GET',
         });
     }
@@ -59,7 +59,7 @@ const App = () => {
         async function isLoggedIn() {
             console.log(env);
             console.log(env.REACT_APP_BASE_URL);
-            let spotifyResponse = await fetch(`${env.REACT_APP_BASE_URL}/check_login`, {
+            let spotifyResponse = await fetch(`/check_login`, {
                 method: 'GET',
             });
         
@@ -67,7 +67,7 @@ const App = () => {
                 setLoggedIn(true);
             } else {
                 // redirect to /login page
-                window.location.replace(`${env.REACT_APP_BASE_URL}/login`);
+                window.location.replace(`/login`);
                 setLoggedIn(false);
             }
             
