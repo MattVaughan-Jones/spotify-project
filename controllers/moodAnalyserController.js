@@ -129,7 +129,7 @@ function analyse(playlistAudioFeatures) {
                 psychoanalysis.advice = 'Find a more interesting hobby. People will like you more.';
             } else if (averageAudioFeatures.valence < 0.5) {
                 psychoanalysis.advice = 'Smile more. The world is beautiful.';
-            } else psychoanalysis.advice = 'You are perfet as you are :)';
+            } else psychoanalysis.advice = 'You are perfect as you are :)';
         }
 
     return psychoanalysis;
