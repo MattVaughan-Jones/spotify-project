@@ -44,7 +44,7 @@ const Mood = ({ playlistId }) => {
   useEffect(() => {
     console.log('the useeffect');
     async function getPsycholanalysis() {
-      let playlistsResponse = await fetch(`${env.REACT_APP_BASE_URL}/playlistData/${playlistId}`, {
+      let playlistsResponse = await fetch(`/playlistData/${playlistId}`, {
           method: 'GET',
       });
       json = await playlistsResponse.json();

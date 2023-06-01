@@ -9,7 +9,7 @@ const Playlists = ({callback}) => {
 
     useEffect(() => {
         async function getPlaylists() {
-            let playlistsResponse = await fetch(`${env.REACT_APP_BASE_URL}/playlists`, {
+            let playlistsResponse = await fetch(`/playlists`, {
                 method: 'GET',
             });
             let json = await playlistsResponse.json();

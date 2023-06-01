@@ -15,6 +15,13 @@ const router = require('find-my-way')({
     }
 })
 
+//home page
+router.on('GET', '/', (req, res, params) => {
+    file = fs.readFileSync(path.resolve(__dirname, `../client/index.html`), 'utf8');
+    res.write(file);
+    res.end();
+})
+
 //login route
 router.on('GET', '/login', (req, res, params) => {
     const scopes = 'user-read-recently-played user-read-private playlist-read-private';
