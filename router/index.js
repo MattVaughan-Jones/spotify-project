@@ -95,7 +95,7 @@ router.on('GET', '/playlists', async (req, res, params) => {
 
     let token = spotify.getAccessToken();
 
-    // fetch list of playlists
+    //fetch list of playlists
     try {
         let spotifyResponse = await fetch('https://api.spotify.com/v1/me/playlists?limit=50', {
             method: 'GET',
@@ -104,10 +104,10 @@ router.on('GET', '/playlists', async (req, res, params) => {
             }
         });
 
-        let responseData = await spotifyResponse.json()
+        let responseData = await spotifyResponse.text()
 
         res.statuscode = 200;
-        res.write(JSON.stringify({playlists: responseData}));
+        res.write(responseData);
         res.end()
 
         return;
