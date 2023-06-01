@@ -15,7 +15,7 @@ const router = require('find-my-way')({
     }
 })
 
-// login route
+//login route
 router.on('GET', '/login', (req, res, params) => {
     const scopes = 'user-read-recently-played user-read-private playlist-read-private';
 
