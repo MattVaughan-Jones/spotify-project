@@ -107,7 +107,7 @@ const App = () => {
                         <HomeIcon />
                     </IconButton>
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        Moodalizer
+                        Psychify
                     </Typography>
                     <Button color="inherit" onClick={logout}>Logout</Button>
                     </Toolbar>

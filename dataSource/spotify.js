@@ -1,14 +1,34 @@
 const fetch = require('cross-fetch');
+const querystring = require('querystring');
 
 let accessToken;
 let refreshToken;
 
-function setAccessToken(token) {
-    accessToken = token;
+async function setTokens(query) {
+    const code = query.code;
+    const authorization = process.env.CLIENT_ID + ':' + process.env.CLIENT_SECRET
+
+    let spotifyResponse = await fetch('https://accounts.spotify.com/api/token', {
+        method: 'POST',
+        headers: {
+            Authorization: 'Basic ' + Buffer.from(authorization).toString('base64'),
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+            grant_type: 'authorization_code',
+            code,
+            redirect_uri: `${process.env.BASE_URL}/callback`
+        })
+    });
+
+    let responseData = await spotifyResponse.json()
+    accessToken = responseData.access_token;
+    refreshToken = responseData.refresh_token;
 }
 
-function setRefreshToken(token) {
-    refreshToken = token;
+function logout() {
+    accessToken = null;
+    refreshToken = null;
 }
 
 function getAccessToken() {
@@ -51,6 +71,19 @@ async function getPlaylist(userID) {
     return await spotifyResponse.json();
 }
 
+function loginQuery() {
+    const scopes = 'user-read-recently-played user-read-private playlist-read-private';
+
+    const query = querystring.stringify({
+        response_type: 'code',
+        client_id: process.env.CLIENT_ID,
+        scope: scopes,
+        redirect_uri: `${process.env.BASE_URL}/callback`,
+    });
+
+    return query;
+}
+
 setInterval(async () => {
     if (refreshToken) {
         const authorization = process.env.CLIENT_ID + ':' + process.env.CLIENT_SECRET
@@ -73,9 +106,10 @@ setInterval(async () => {
 }, 2400000)
 
 module.exports = {
-    setAccessToken,
     getAccessToken,
-    setRefreshToken,
     getPlaylist,
-    getUser
+    getUser,
+    loginQuery,
+    setTokens,
+    logout
 };

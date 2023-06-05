@@ -24,14 +24,7 @@ router.on('GET', '/', (req, res, params) => {
 
 //login route
 router.on('GET', '/login', (req, res, params) => {
-    const scopes = 'user-read-recently-played user-read-private playlist-read-private';
-
-    const query = querystring.stringify({
-        response_type: 'code',
-        client_id: process.env.CLIENT_ID,
-        scope: scopes,
-        redirect_uri: `${process.env.BASE_URL}/callback`,
-    });
+    const query = spotify.loginQuery();
 
     res.writeHead(301, {
         Location: `https://accounts.spotify.com/authorize?` + query
@@ -40,8 +33,7 @@ router.on('GET', '/login', (req, res, params) => {
 
 //logout route
 router.on('GET', '/logout', (req, res, params) => {
-    spotify.setAccessToken(null);
-    spotify.setRefreshToken(null);
+    spotify.logout();
 
     res.writeHead(200).end();
 })
@@ -54,25 +46,7 @@ router.on('GET', '/callback', async (req, res, params) => {
     if (query.error) {
         console.log('[ERROR] authorisation: ' + query.error);
     } else {
-        const code = query.code;
-        const authorization = process.env.CLIENT_ID + ':' + process.env.CLIENT_SECRET
-
-        let spotifyResponse = await fetch('https://accounts.spotify.com/api/token', {
-            method: 'POST',
-            headers: {
-                Authorization: 'Basic ' + Buffer.from(authorization).toString('base64'),
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: new URLSearchParams({
-                grant_type: 'authorization_code',
-                code,
-                redirect_uri: `${process.env.BASE_URL}/callback`
-            })
-        });
-
-        let responseData = await spotifyResponse.json()
-        spotify.setAccessToken(responseData.access_token);
-        spotify.setRefreshToken(responseData.refresh_token);
+        spotify.setTokens(query);
 
         res.writeHead(301, {
             Location: `${process.env.BASE_URL}/index.html`
@@ -90,6 +64,7 @@ router.on('GET', '/check_login', (req, res, params) => {
     res.writeHead(401).end();
 })
 
+//TODO - there is already a playlist route in spotify.js check if it works.
 // playlists route
 router.on('GET', '/playlists', async (req, res, params) => {
 
