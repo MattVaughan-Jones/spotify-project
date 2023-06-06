@@ -54,21 +54,17 @@ async function getUser() {
 }
 
 // get list of playlists
-async function getPlaylist(userID) {
-
-    if (!accessToken) {
-        return null;
-    }
-
-    let spotifyResponse = await fetch(`https://api.spotify.com/v1/users/${userID}/playlists`, {
+async function getPlaylists() {
+    spotifyResponse = await fetch('https://api.spotify.com/v1/me/playlists?limit=50', {
         method: 'GET',
         headers: {
             Authorization: 'Bearer ' + accessToken,
-            'Content-Type': 'application/json',
-        },
+        }
     });
 
-    return await spotifyResponse.json();
+    let playlists = await spotifyResponse.json()
+
+    return playlists;
 }
 
 function loginQuery() {
@@ -82,6 +78,34 @@ function loginQuery() {
     });
 
     return query;
+}
+
+async function audioFeatures(params) {
+    const playlistId = params.id;
+
+    // fetch list of tracks in playlist
+    let spotifyTracksResponse = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks?limit=50`, {
+        method: 'GET',
+        headers: {
+            Authorization: 'Bearer ' + accessToken,
+        }
+    });
+
+    let trackIds = await spotifyTracksResponse.json()
+
+    let trackIdsString = trackIds.items.map((item) => {
+        return item.track.id;
+    }).toString()
+
+    // fetch list tracks' audio features
+    let spotifyAudioFeaturesResponse = await fetch(`https://api.spotify.com/v1/audio-features?ids=${trackIdsString}`, {
+        method: 'GET',
+        headers: {
+            Authorization: 'Bearer ' + accessToken,
+        }
+    });
+
+    return await spotifyAudioFeaturesResponse.json();
 }
 
 setInterval(async () => {
@@ -107,9 +131,10 @@ setInterval(async () => {
 
 module.exports = {
     getAccessToken,
-    getPlaylist,
     getUser,
+    getPlaylists,
     loginQuery,
     setTokens,
-    logout
+    logout,
+    audioFeatures
 };
