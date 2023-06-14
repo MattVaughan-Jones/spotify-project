@@ -8,8 +8,6 @@ import * as env from 'env';
 
 const Mood = ({ playlistId }) => {
 
-  console.log('it does something');
-
   const radarInitialState = {
     labels: [],
     datasets: [{
@@ -19,6 +17,7 @@ const Mood = ({ playlistId }) => {
     }]
   }
 
+  const [emptyPlaylist, setEmptyPlaylist] = useState(null);
   const [bigFiveData, setBigFiveData] = useState(radarInitialState);
   const [darkTriadData, setdarkTriadData] = useState(radarInitialState);
   const [advice, setAdvice] = useState('');
@@ -42,7 +41,6 @@ const Mood = ({ playlistId }) => {
   let psychoanalysis;
 
   useEffect(() => {
-    console.log('the useeffect');
     async function getPsycholanalysis() {
       let playlistsResponse = await fetch(`/playlistData/${playlistId}`, {
           method: 'GET',
@@ -51,54 +49,60 @@ const Mood = ({ playlistId }) => {
       
       psychoanalysis = json.response;
 
-      setBigFiveData({
-        labels: Object.keys(psychoanalysis.bigFive),
-        datasets: [{
-          label: 'Big Five Personality Traits',
-          data: Object.values(psychoanalysis.bigFive),
-          fill: true,
-          backgroundColor: 'rgb(82, 176, 41, 0.2)',
-          borderColor: 'rgb(82, 176, 41)',
-          pointBackgroundColor: 'rgb(82, 176, 41)',
-          pointBorderColor: '#fff',
-          pointHoverBackgroundColor: '#fff',
-          pointHoverBorderColor: 'rgb(82, 176, 41)'
-        }]
-      });
+      if (psychoanalysis == 'empty playlist'){
+        setEmptyPlaylist(true);
+      } else {
+        setEmptyPlaylist(false);
 
-      setdarkTriadData({
-        labels: Object.keys(psychoanalysis.darkTriad),
-        datasets: [{
-          label: 'Dark Triad',
-          data: Object.values(psychoanalysis.darkTriad),
-          fill: true,
-          backgroundColor: 'rgb(54, 162, 235, 0.2)',
-          borderColor: 'rgb(54, 162, 235)',
-          pointBackgroundColor: 'rgb(54, 162, 235)',
-          pointBorderColor: '#fff',
-          pointHoverBackgroundColor: '#fff',
-          pointHoverBorderColor: 'rgb(255, 99, 132)'
-        }]
-      });
+        setBigFiveData({
+          labels: Object.keys(psychoanalysis.bigFive),
+          datasets: [{
+            label: 'Big Five Personality Traits',
+            data: Object.values(psychoanalysis.bigFive),
+            fill: true,
+            backgroundColor: 'rgb(82, 176, 41, 0.2)',
+            borderColor: 'rgb(82, 176, 41)',
+            pointBackgroundColor: 'rgb(82, 176, 41)',
+            pointBorderColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: 'rgb(82, 176, 41)'
+          }]
+        });
 
-      setLikeabilityData({
-        labels: ['average', 'You'],
-        datasets: [{
-          label: 'Likeability',
-          data: Object.values(psychoanalysis.likeability),
-          backgroundColor: [
-            'rgba(255, 99, 132, 0.2)',
-            'rgba(255, 159, 64, 0.2)',
-          ],
-          borderColor: [
-            'rgb(255, 99, 132)',
-            'rgb(255, 159, 64)',
-          ],
-          borderWidth: 2
-        }]
-      });
+        setdarkTriadData({
+          labels: Object.keys(psychoanalysis.darkTriad),
+          datasets: [{
+            label: 'Dark Triad',
+            data: Object.values(psychoanalysis.darkTriad),
+            fill: true,
+            backgroundColor: 'rgb(54, 162, 235, 0.2)',
+            borderColor: 'rgb(54, 162, 235)',
+            pointBackgroundColor: 'rgb(54, 162, 235)',
+            pointBorderColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: 'rgb(255, 99, 132)'
+          }]
+        });
 
-      setAdvice(psychoanalysis.advice);
+        setLikeabilityData({
+          labels: ['average', 'You'],
+          datasets: [{
+            label: 'Likeability',
+            data: Object.values(psychoanalysis.likeability),
+            backgroundColor: [
+              'rgba(255, 99, 132, 0.2)',
+              'rgba(255, 159, 64, 0.2)',
+            ],
+            borderColor: [
+              'rgb(255, 99, 132)',
+              'rgb(255, 159, 64)',
+            ],
+            borderWidth: 2
+          }]
+        });
+
+        setAdvice(psychoanalysis.advice);
+      }
     }
 
     getPsycholanalysis();
@@ -212,34 +216,52 @@ const Mood = ({ playlistId }) => {
     }
   };
   
-  return (
-    <>
-      <Grid container spacing={5} py={5} px={2}>
-
-        <Grid key='bigFive' xs={4} display="flex" justifyContent="center" alignItems="center" flexDirection="column" >
-          <Radar data={bigFiveData} options={bigFiveOptions} />
+  if (emptyPlaylist == true) {
+    return (
+      <>
+        <Grid container spacing={5} py={5} px={2}>
+          <Grid key='advice' xs={12} display="flex" justifyContent="center" alignItems="center" flexDirection="column" >
+            <Card sx={{ minWidth: "100%" }} style={{backgroundColor: "rgb(56, 142, 60)"}}>
+              <CardContent>
+                <Typography variant="h4" color="white" display="flex" alignItems="center" flexDirection="column">
+                  <p>Like you, this playlist is empty. Please select another.</p>
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
         </Grid>
+      </>
+    )
+  } else if (emptyPlaylist == false) {
+    return (
+      <>
+        <Grid container spacing={5} py={5} px={2}>
 
-        <Grid key='darkTriad' xs={4} display="flex" justifyContent="center" alignItems="center" flexDirection="column" >
-          <Radar data={darkTriadData} options={darkTriadOptions} />
-        </Grid>
+          <Grid key='bigFive' xs={4} display="flex" justifyContent="center" alignItems="center" flexDirection="column" >
+            <Radar data={bigFiveData} options={bigFiveOptions} />
+          </Grid>
 
-        <Grid key='likeability' xs={4} display="flex" justifyContent="center" alignItems="center" flexDirection="column" >
-          <Bar data={likeabilityData} options={likeabilityOptions} />
-        </Grid>
+          <Grid key='darkTriad' xs={4} display="flex" justifyContent="center" alignItems="center" flexDirection="column" >
+            <Radar data={darkTriadData} options={darkTriadOptions} />
+          </Grid>
 
-        <Grid key='advice' xs={12} display="flex" justifyContent="center" alignItems="center" flexDirection="column" >
-          <Card sx={{ minWidth: "100%" }} style={{backgroundColor: "rgb(56, 142, 60)"}}>
-            <CardContent>
-              <Typography variant="h4" color="white" display="flex" alignItems="center" flexDirection="column">
-                {advice}
-              </Typography>
-            </CardContent>
-          </Card>
+          <Grid key='likeability' xs={4} display="flex" justifyContent="center" alignItems="center" flexDirection="column" >
+            <Bar data={likeabilityData} options={likeabilityOptions} />
+          </Grid>
+
+          <Grid key='advice' xs={12} display="flex" justifyContent="center" alignItems="center" flexDirection="column" >
+            <Card sx={{ minWidth: "100%" }} style={{backgroundColor: "rgb(56, 142, 60)"}}>
+              <CardContent>
+                <Typography variant="h4" color="white" display="flex" alignItems="center" flexDirection="column">
+                  {advice}
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
         </Grid>
-      </Grid>
-    </>
-  );
+      </>
+    );
+  }
 }
 
 export default Mood;

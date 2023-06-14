@@ -93,9 +93,16 @@ router.on('GET', '/playlists', async (req, res, params) => {
 // playlistTracks route
 router.on('GET', '/playlistData/:id', async (req, res, params) => {
 
-    let audioFeaturesResponse = await spotify.audioFeatures(params);
+    let audioFeatures = await spotify.getAudioFeatures(params);
 
-    let playlistPsychoanalysis = moodAnalyser.analyse(audioFeaturesResponse.audio_features);
+    if (audioFeatures == 'empty playlist') {
+        res.statuscode = 200;
+        res.write(JSON.stringify({response: 'empty playlist'}));
+        res.end()
+        return;
+    }
+
+    let playlistPsychoanalysis = moodAnalyser.analyse(audioFeatures.audio_features);
 
     res.statuscode = 200;
     res.write(JSON.stringify({response: playlistPsychoanalysis}));

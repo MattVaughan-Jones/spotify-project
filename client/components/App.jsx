@@ -57,8 +57,6 @@ const App = () => {
 
     useEffect(() => {
         async function isLoggedIn() {
-            console.log(env);
-            console.log(env.REACT_APP_BASE_URL);
             let spotifyResponse = await fetch(`/check_login`, {
                 method: 'GET',
             });
