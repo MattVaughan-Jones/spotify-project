@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "serve": "nodemon index.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "esbuild": "node build.js",
     "eswatch": "node build.js -w",
     "build": "./node_modules/.bin/esbuild ./client/app.jsx --bundle --outfile=./client/index.js",
@@ -36,6 +36,7 @@
   "devDependencies": {
     "dotenv": "^16.0.3",
     "esbuild": "^0.17.19",
-    "esbuild-envfile-plugin": "^1.0.5"
+    "esbuild-envfile-plugin": "^1.0.5",
+    "jest": "^29.5.0"
   }
 }

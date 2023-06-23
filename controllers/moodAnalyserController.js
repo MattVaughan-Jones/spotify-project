@@ -1,5 +1,7 @@
 function analyse(playlistAudioFeatures) {
 
+    console.log(playlistAudioFeatures);
+
     const length = playlistAudioFeatures.length;
     
     let averageAudioFeatures = {
@@ -65,8 +67,8 @@ function analyse(playlistAudioFeatures) {
         allAudioFeatures.timeSignature.push(x.time_signature);
     })
 
-    // if the key of the song is C#, Eb, F#, G#, B, more than 40% of the time
-    // darkTriadTrigger is set to true and negative traits are amplified
+    // if the key of the song is C#, Eb, F#, G#, B, for more than 40% of the tracks in
+    // the playlist, darkTriadTrigger is set to true and negative traits are amplified
     let darkTriadTrigger;
     let darkKeyCounter = 0;
     let darkKeys = {
